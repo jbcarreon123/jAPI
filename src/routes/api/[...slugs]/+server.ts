@@ -1,16 +1,16 @@
 import { Elysia, error, t } from "elysia";
 import swagger from "@elysiajs/swagger";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-typebox'
-import { table } from './db/schema'
-import { db, getCommentsWithoutId } from "./db";
+import { table } from '$lib/db/schema'
+import { db, getCommentsWithoutId } from "$lib/db";
 import { eq, ilike } from "drizzle-orm";
-import { trimSlashEnd } from "./utils/trim-slash-end";
-import { generate } from "./utils/random-string-gen";
+import { trimSlashEnd } from "$lib/utils/trim-slash-end";
+import { generate } from "$lib/utils/random-string-gen";
 import DOMPurify from "isomorphic-dompurify";
 import { marked } from "marked";
 import { rateLimit } from "elysia-rate-limit";
 import { cache } from "elysia-cache";
-import { env } from "bun";
+import cors from "@elysiajs/cors";
 
 const _createComment = createInsertSchema(table.comments, {
   author: t.String({ default: 'Anonymous' }),
@@ -36,9 +36,18 @@ const editComment = t.Omit(
   ['author', 'additionalInfo', 'createdAt', 'siteUrl', 'type', 'parentId']
 )
 
-const app = new Elysia()
-  .use(rateLimit({ max: 3 }))
+DOMPurify.setConfig(
+  {
+    USE_PROFILES: {html: true},
+    FORBID_TAGS: ['style'],
+    FORBID_ATTR: ['style', 'class', 'aria-hidden', 'data-japicmt-replyid']
+  }
+)
+
+const app = new Elysia({ prefix: '/api' })
+  .use(rateLimit({ max: 5 }))
   .use(cache())
+  .use(cors())
   .use(swagger({
     path: '/',
     documentation: {
@@ -62,7 +71,7 @@ const app = new Elysia()
   .post('/create-api-key', async ({ query }) => {
     const { domain, masterKey } = query
 
-    if (masterKey !== env.MASTER_KEY) {
+    if (masterKey !== process.env.MASTER_KEY) {
       throw error(404, "NOT_FOUND")
     }
 
@@ -129,7 +138,7 @@ const app = new Elysia()
   })
   .post('/comments', async ({ body, query, headers }) => {
     const { author, content, siteUrl, parentId, additionalInfo } = body;
-    const { parseMarkdown, apiKey } = query;
+    const { parseMarkdown } = query;
     const { origin } = headers;
 
     let url;
@@ -140,7 +149,7 @@ const app = new Elysia()
     else
       throw error(400, 'siteUrl must have a value')
 
-    let api = await db.query.apiKeys.findFirst({ where: (f, o) => o.eq(f.key, apiKey) })
+    let api = await db.query.apiKeys.findFirst({ where: (f, o) => o.eq(f.key, query.apiKey) })
     let type = "DEFAULT";
     if (api) type = "WEBMASTER"
 
@@ -243,9 +252,9 @@ const app = new Elysia()
       summary: 'Delete a comment', 
       tags: ['jAPI Comments'] 
     } 
-  })
-  .listen(3000);
+  });
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+type RequestHandler = (v: { request: Request }) => Response | Promise<Response>
+
+export const GET: RequestHandler = ({ request }) => app.handle(request)
+export const POST: RequestHandler = ({ request }) => app.handle(request)

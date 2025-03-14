@@ -1,9 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './schema';
-import { env } from 'bun';
 import { trimSlashEnd } from '../utils/trim-slash-end';
 
-export const db = drizzle(env.CONNECTION_STRING, { schema });
+export const db = drizzle(process.env.DATABASE_URL, { schema });
 
 export async function getCommentsWithoutId(url: string) {
     const results = await db.query.comments.findMany({

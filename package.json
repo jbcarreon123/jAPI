@@ -1,29 +1,44 @@
 {
-  "name": "japi",
-  "version": "1.0.50",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
-  },
-  "dependencies": {
-    "@elysiajs/swagger": "^1.2.2",
-    "bun": "^1.2.5",
-    "drizzle-orm": "^0.40.0",
-    "drizzle-typebox": "^0.3.0",
-    "elysia": "latest",
-    "elysia-cache": "^0.1.0",
-    "elysia-rate-limit": "^4.2.1",
-    "isomorphic-dompurify": "^2.22.0",
-    "marked": "^15.0.7",
-    "pg": "^8.14.0",
-    "postgres": "^3.4.5"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.30.5"
-  },
-  "override": {
-    "@sinclair/typebox": "0.32.4"
-  },
-  "module": "src/index.js"
+	"name": "frntback",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"db:push": "drizzle-kit push",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio"
+	},
+	"devDependencies": {
+		"@elysiajs/cors": "^1.2.0",
+		"@elysiajs/swagger": "^1.2.2",
+		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@tailwindcss/vite": "^4.0.0",
+		"@types/node": "^22.13.10",
+		"drizzle-kit": "^0.30.2",
+		"drizzle-typebox": "^0.3.0",
+		"elysia": "latest",
+		"elysia-cache": "^0.1.0",
+		"elysia-rate-limit": "^4.2.1",
+		"isomorphic-dompurify": "^2.22.0",
+		"marked": "^15.0.7",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"bun": "^1.2.5",
+		"drizzle-orm": "^0.40.0",
+		"pg": "^8.14.0",
+		"postgres": "^3.4.5"
+	}
 }

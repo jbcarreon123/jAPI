@@ -1,10 +1,14 @@
 import { defineConfig } from 'drizzle-kit';
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
 export default defineConfig({
-  out: './drizzle',
-  schema: './src/db/schema.ts',
-  dialect: 'postgresql',
+  schema: './src/lib/db/schema.ts',
+
   dbCredentials: {
-    url: 'postgresql://japi:japi_pswd@localhost:5432/japi',
+    url: process.env.DATABASE_URL
   },
+
+  verbose: true,
+  strict: true,
+  dialect: 'postgresql'
 });
