@@ -1,1 +1,78 @@
 @import 'tailwindcss';
+
+@font-face {
+    font-family: "Inter";
+    src: url('/fonts/Inter-Variable.ttf');
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, Cantarell, Ubuntu, roboto, noto, helvetica, arial, sans-serif;
+}
+
+@theme inline {
+    --color-grv-red: rgba(var(--grv-red));
+    --color-grv-yellow: rgba(var(--grv-yellow));
+    --color-grv-green: rgba(var(--grv-green));
+    --color-grv-sky: rgba(var(--grv-sky));
+    --color-grv-sapphire: rgba(var(--grv-sapphire));
+    --color-grv-blue: rgba(var(--grv-blue));
+    --color-grv-text: rgba(var(--grv-text));
+    --color-grv-subtext0: rgba(var(--grv-subtext0));
+    --color-grv-overlay0: rgba(var(--grv-overlay0));
+    --color-grv-surface0: rgba(var(--grv-surface0));
+    --color-grv-base: rgba(var(--grv-base));
+    --color-grv-mantle: rgba(var(--grv-mantle));
+}
+
+:root {
+    --grv-red: 204, 36, 29;
+    --grv-green: 152, 151, 26;
+    --grv-yellow: 215, 153, 33;
+    --grv-blue: 69, 133, 136;
+    --grv-sapphire: 131, 165, 152;
+    --grv-sky: 104, 157, 106;
+    --grv-text: 235, 219, 178;
+    --grv-subtext0: 168, 153, 132;
+    --grv-overlay0: 60, 56, 54;
+    --grv-mantle: 29, 32, 33;
+    --grv-surface0: 80, 73, 69;
+    --grv-base: 50, 48, 47;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --grv-red: 204, 36, 29;
+        --grv-green: 152, 151, 26;
+        --grv-yellow: 215, 153, 33;
+        --grv-blue: 69, 133, 136;
+        --grv-sapphire: 7, 102, 120;
+        --grv-sky: 104, 157, 106;
+        --grv-text: 60, 56, 54;
+        --grv-subtext0: 124, 111, 100;
+        --grv-overlay0: 235, 219, 178;
+        --grv-mantle: 249, 245, 215;
+        --grv-surface0: 213, 196, 161;
+        --grv-base: 242, 229, 188;
+    }
+}
+
+a:hover {
+    background-position:-100% 0;
+}
+
+a {
+    background-image: linear-gradient(to right,rgba(0,0,0,0) 50%,rgba(var(--grv-base)) 50%) !important;
+    background-size:200% 100%;
+    transition:background-position 1s;
+    text-decoration: underline dotted;
+
+    padding: 3px;
+}
+
+aside p {
+    padding: 3px;
+}
+
+*:not(.oneko) {
+    @apply transition-all motion-reduce:transition-none
+}
